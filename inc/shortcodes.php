@@ -1,6 +1,6 @@
 <?php
 
-class WP_Central_Shortcodes {
+class WordPress_Stats_Shortcodes {
 
 	public function __construct() {
 		add_shortcode( 'versions_last_year_wordpress', array( $this, 'versions_last_year_wordpress' ) );
@@ -54,5 +54,3 @@ class WP_Central_Shortcodes {
 	}
 
 }
-
-new WP_Central_Shortcodes;

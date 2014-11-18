@@ -1,12 +1,12 @@
 <?php
 
-function rockstar_graph( $type, $method, $data, $args = array() ) {
-	global $rockstar_graph;
+function wordpress_stats_graph( $type, $method, $data, $args = array() ) {
+	global $wordpress_stats_graph;
 
-	return $rockstar_graph->graph( $type, $method, $data, $args );
+	return $wordpress_stats_graph->graph( $type, $method, $data, $args );
 }
 
-class Rockstar_Graph {
+class WordPress_Stats_Graph {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_script' ) );
@@ -54,4 +54,4 @@ abstract class Rockstar_Graph_Abstract {
 	abstract public function bar( $args );
 }
 
-$rockstar_graph = new Rockstar_Graph();
+$wordpress_stats_graph = new WordPress_Stats_Graph();

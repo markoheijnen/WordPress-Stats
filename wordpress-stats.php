@@ -36,6 +36,8 @@ class WordPress_Stats {
 		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
 		add_action( 'cron_wordpress_stats', array( $this, 'cronjob_fast' ) );
 		add_action( 'cron_wordpress_stats_daily', array( $this, 'cronjob_daily' ) );
+
+		new WordPress_Stats_Shortcodes;
 	}
 
 	public function install() {
