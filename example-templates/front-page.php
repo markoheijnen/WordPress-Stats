@@ -36,12 +36,16 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h2 class="text-center">Downloads per day</h2>
-				<?php echo wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::counts_per_day() ); ?>
+				<?php echo wordpress_stats_graph( 'chartjs', 'radar_chart', WordPress_Stats_Api::counts_per_day() ); ?>
 			</div>
 
 			<div class="col-md-6">
 				<h2 class="text-center">Downloads per hour</h2>
-				<?php echo wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::counts_per_hour() ); ?>
+				<?php echo wordpress_stats_graph( 'chartjs', 'line_chart', WordPress_Stats_Api::counts_per_hour(), array(
+					'options' => array(
+						'pointHitDetectionRadius' => 5,
+					),
+				) ); ?>
 				<p class="text-center">All times are GMT based</p>
 			</div>
 		</div>
