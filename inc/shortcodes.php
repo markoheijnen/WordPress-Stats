@@ -19,7 +19,7 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return rockstar_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
 	}
 
 	public function versions_last_year_php() {
@@ -28,7 +28,7 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return rockstar_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
 	}
 
 	public function versions_last_year_mysql() {
@@ -37,20 +37,20 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return rockstar_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
 	}
 
 
 	public function current_wordpress_versions() {
-		return rockstar_graph( 'morris', 'pie_chart', WordPress_Stats_Api::wordpress_version() );
+		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::wordpress_version() );
 	}
 
 	public function current_php_versions() {
-		return rockstar_graph( 'morris', 'pie_chart', WordPress_Stats_Api::php_version() );
+		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::php_version() );
 	}
 
 	public function current_mysql_versions() {
-		return rockstar_graph( 'morris', 'pie_chart', WordPress_Stats_Api::mysql_version() );
+		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::mysql_version() );
 	}
 
 }
