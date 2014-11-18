@@ -17,6 +17,7 @@ include 'api.php';
 
 include 'inc/graph.php';
 include 'inc/graph.morris.php';
+include 'inc/graph.chartjs.php';
 include 'inc/shortcodes.php';
 
 
