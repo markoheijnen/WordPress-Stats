@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 include 'api.php';
 
+include 'inc/graph.php';
+include 'inc/graph.morris.php';
+include 'inc/shortcodes.php';
+
+
 class WordPress_Stats {
 	private $version = '1.0';
 	private $api_url = 'http://api.wordpress.org/stats/';
