@@ -306,69 +306,78 @@ class WordPress_Stats_Api {
 	}
 
 
+	/**
+	 * @return array
+	 */
 	public static function wordpress_version_by_day() {
 		global $wpdb;
 
 		//$query = "SELECT version, GROUP_CONCAT(count) as mycount FROM ".self::db_table()." WHERE type='php' GROUP BY version";
 		$table = self::db_table();
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM {$table} WHERE type='wordpress' AND version NOT IN ('2.7', '2.8', '2.9') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		FROM {$table}
+		WHERE TYPE='wordpress' AND VERSION NOT IN ('2.7', '2.8', '2.9')
+		GROUP BY date_gmt, version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = $item->count;
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function php_version_by_day() {
 		global $wpdb;
 
 		$table = self::db_table();
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM {$table} WHERE type='php' AND version NOT IN ('4.3', '4.4', '5.0', '5.6', '5.7') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		FROM {$table}
+		WHERE type='php' AND version NOT IN ('4.3', '4.4', '5.0', '5.6', '5.7')
+		GROUP BY date_gmt, version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = $item->count;
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function mysql_version_by_day() {
 		global $wpdb;
 
 		$table = self::db_table();
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM {$table} WHERE type='mysql' AND version NOT IN ('3.23', '4.0', '4.1', '5.', '5.13', '5.2', '5.3', '5.4', '5.7') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		FROM {$table}
+		WHERE type='mysql' AND version NOT IN ('3.23', '4.0', '4.1', '5.', '5.13', '5.2', '5.3', '5.4', '5.7')
+		GROUP BY date_gmt, version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = $item->count;
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}
