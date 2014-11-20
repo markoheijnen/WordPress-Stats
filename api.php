@@ -314,17 +314,17 @@ class WordPress_Stats_Api {
 
 		//$query = "SELECT version, GROUP_CONCAT(count) as mycount FROM ".self::db_table()." WHERE type='php' GROUP BY version";
 		$table = self::db_table();
-		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
 		FROM {$table}
 		WHERE TYPE='wordpress' AND VERSION NOT IN ('2.7', '2.8', '2.9')
-		GROUP BY date_gmt, version";
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
 		$results = $wpdb->get_results( $query );
 		$data    = array();
 
 		foreach ( $results as $item ) {
 			$data[ $item->date ]['date']           = $item->date;
-			$data[ $item->date ][ $item->version ] = $item->count;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
 
 		$data = array_values( $data );
@@ -339,17 +339,17 @@ class WordPress_Stats_Api {
 		global $wpdb;
 
 		$table = self::db_table();
-		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
 		FROM {$table}
 		WHERE type='php' AND version NOT IN ('4.3', '4.4', '5.0', '5.6', '5.7')
-		GROUP BY date_gmt, version";
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
 		$results = $wpdb->get_results( $query );
 		$data    = array();
 
 		foreach ( $results as $item ) {
 			$data[ $item->date ]['date']           = $item->date;
-			$data[ $item->date ][ $item->version ] = $item->count;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
 
 		$data = array_values( $data );
@@ -364,17 +364,17 @@ class WordPress_Stats_Api {
 		global $wpdb;
 
 		$table = self::db_table();
-		$query = "SELECT DATE_FORMAT(date_gmt,'%Y-%m-%d') AS date, version, count
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
 		FROM {$table}
 		WHERE type='mysql' AND version NOT IN ('3.23', '4.0', '4.1', '5.', '5.13', '5.2', '5.3', '5.4', '5.7')
-		GROUP BY date_gmt, version";
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
 		$results = $wpdb->get_results( $query );
 		$data    = array();
 
 		foreach ( $results as $item ) {
 			$data[ $item->date ]['date']           = $item->date;
-			$data[ $item->date ][ $item->version ] = $item->count;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
 
 		$data = array_values( $data );
