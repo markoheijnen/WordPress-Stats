@@ -33,6 +33,43 @@ class Rockstar_Graph_Chartjs extends Rockstar_Graph_Abstract {
 
 	/**
 	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public function doughnut_chart( $args ) {
+
+		$data = array_reverse( $this->data );
+
+		$args['options'] = array(
+			'tooltipTemplate' => "<%= label %> — <%= value %>%",
+			'animateRotate'   => false,
+		);
+
+		$colors = array(
+			'#2ECC40',
+			'#41BF3F',
+			'#54B23E',
+			'#67A63D',
+			'#7A993C',
+			'#8D8C3B',
+			'#A0803A',
+			'#B37339',
+			'#C66638',
+			'#D95A37',
+			'#EC4D36',
+			'#FF4136',
+		);
+
+		foreach ( $data as $key => $entry ) {
+			$data[ $key ]          = (array) $entry;
+			$data[ $key ]['color'] = next( $colors );
+		}
+
+		return $this->get_chart( 'Doughnut', $data, $args );
+	}
+
+	/**
+	 * @param array $args
 	 */
 	public function pie_chart( $args ) {
 	}
