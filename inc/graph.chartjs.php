@@ -18,7 +18,17 @@ class Rockstar_Graph_Chartjs extends Rockstar_Graph_Abstract {
 	 */
 	public function line_chart( $args ) {
 
-		return $this->get_chart( 'Line', $args );
+		$data = array(
+			'labels'   => wp_list_pluck( $this->data, 'label' ),
+			'datasets' => array(
+				array(
+					'data'      => wp_list_pluck( $this->data, 'value' ),
+					'fillColor' => 'rgba(11,98,164,0.5)',
+				),
+			),
+		);
+
+		return $this->get_chart( 'Line', $data, $args );
 	}
 
 	/**
@@ -40,24 +50,6 @@ class Rockstar_Graph_Chartjs extends Rockstar_Graph_Abstract {
 	 */
 	public function radar_chart( $args ) {
 
-		return $this->get_chart( 'Radar', $args );
-	}
-
-	/**
-	 * @param string $type
-	 * @param array  $args
-	 *
-	 * @return string
-	 */
-	protected function get_chart( $type, $args ) {
-
-		$uid  = esc_attr( $this->unique_id() );
-		$type = esc_js( $type );
-		$html = '<canvas id="' . $uid . '" class="graph"></canvas>';
-
-		$html .= '<script type="text/javascript">';
-		$html .= 'jQuery(document).ready(function($) {';
-
 		$data = array(
 			'labels'   => wp_list_pluck( $this->data, 'label' ),
 			'datasets' => array(
@@ -67,6 +59,24 @@ class Rockstar_Graph_Chartjs extends Rockstar_Graph_Abstract {
 				),
 			),
 		);
+
+		return $this->get_chart( 'Radar', $data, $args );
+	}
+
+	/**
+	 * @param string $type
+	 * @param array  $args
+	 *
+	 * @return string
+	 */
+	protected function get_chart( $type, $data, $args ) {
+
+		$uid  = esc_attr( $this->unique_id() );
+		$type = esc_js( $type );
+		$html = '<canvas id="' . $uid . '" class="graph"></canvas>';
+
+		$html .= '<script type="text/javascript">';
+		$html .= 'jQuery(document).ready(function($) {';
 
 		$options = array(
 			'tooltipTemplate' => "<%= Math.floor(value/1000000) %> M",
