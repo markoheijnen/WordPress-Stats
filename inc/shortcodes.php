@@ -40,17 +40,25 @@ class WordPress_Stats_Shortcodes {
 		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
 	}
 
-
+	/**
+	 * @return bool|string
+	 */
 	public function current_wordpress_versions() {
-		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::wordpress_version() );
+		return wordpress_stats_graph( 'chartjs', 'doughnut_chart', WordPress_Stats_Api::wordpress_version() );
 	}
 
+	/**
+	 * @return bool|string
+	 */
 	public function current_php_versions() {
-		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::php_version() );
+		return wordpress_stats_graph( 'chartjs', 'doughnut_chart', WordPress_Stats_Api::php_version() );
 	}
 
+	/**
+	 * @return bool|string
+	 */
 	public function current_mysql_versions() {
-		return wordpress_stats_graph( 'morris', 'pie_chart', WordPress_Stats_Api::mysql_version() );
+		return wordpress_stats_graph( 'chartjs', 'doughnut_chart', WordPress_Stats_Api::mysql_version() );
 	}
 
 }
