@@ -19,7 +19,7 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'area_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys, 'ymax' => 100 ) );
 	}
 
 	public function versions_last_year_php() {
@@ -28,7 +28,7 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'area_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys, 'ymax' => 100 ) );
 	}
 
 	public function versions_last_year_mysql() {
@@ -37,7 +37,7 @@ class WordPress_Stats_Shortcodes {
 		unset( $keys[0] );
 		$keys = array_values( $keys );
 
-		return wordpress_stats_graph( 'morris', 'line_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys ) );
+		return wordpress_stats_graph( 'morris', 'area_chart', $data, array( 'x' => 'date', 'y' => $keys, 'label' => $keys, 'ymax' => 100 ) );
 	}
 
 	/**
