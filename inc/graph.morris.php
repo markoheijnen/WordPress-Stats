@@ -67,6 +67,8 @@ class Rockstar_Graph_Morris extends Rockstar_Graph_Abstract {
 		else
 			$html .= ",labels: ['Value']";
 
+		$html .= ',pointSize:0';
+
 
 		$html .= '}));';
 		$html .= '});';
