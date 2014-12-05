@@ -83,22 +83,26 @@ class WordPress_Stats {
 
 	// Type = Downloads, MySQL, PHP, WordPress
 	public function cronjob_fast() {
-		$this->add_stat( 'downloads', $this->latest_version(), $this->get_current_wordpress_downloads() );
+		$count = $this->get_current_wordpress_downloads();
+
+		if ( false !== $count ) {
+			$this->add_stat( 'downloads', $this->latest_version(), $count );
+		}
 	}
 
 	public function cronjob_daily() {
 		$wordpress = $this->get_current_wordpress_usage();
-		foreach( $wordpress as $version => $percentage ) {
+		foreach ( $wordpress as $version => $percentage ) {
 			$this->add_stat( 'wordpress', $version, $percentage );
 		}
 
 		$php = $this->get_current_php_usage();
-		foreach( $php as $version => $percentage ) {
+		foreach ( $php as $version => $percentage ) {
 			$this->add_stat( 'php', $version, $percentage );
 		}
 
 		$mysql = $this->get_current_mysql_usage();
-		foreach( $mysql as $version => $percentage ) {
+		foreach ( $mysql as $version => $percentage ) {
 			$this->add_stat( 'mysql', $version, $percentage );
 		}
 
@@ -115,7 +119,7 @@ class WordPress_Stats {
 			$request = wp_remote_get( 'http://api.wordpress.org/core/version-check/1.7/' );
 			$data    = json_decode( wp_remote_retrieve_body( $request ) );
 
-			if( $data ) {
+			if ( $data ) {
 				$version = explode( '.', $data->offers[0]->current );
 				$version = $version[0] . '.' . $version[1];
 
@@ -129,7 +133,7 @@ class WordPress_Stats {
 	public static function get_current_wordpress_downloads() {
 		$response = wp_remote_get( 'http://wordpress.org/download/counter/?ajaxupdate=1&time=' . time() );
 
-		if( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
 			self::report_error( $response );
 
 			return false;
@@ -147,7 +151,7 @@ class WordPress_Stats {
 	public function get_current_wordpress_usage() {
 		$response = wp_remote_get( $this->api_url . 'wordpress/1.0/' );
 
-		if( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
 			$this->report_error( $response );
 
 			return false;
@@ -162,7 +166,7 @@ class WordPress_Stats {
 	public function get_current_php_usage() {
 		$response = wp_remote_get( $this->api_url . 'php/1.0/' );
 
-		if( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
 			$this->report_error( $response );
 
 			return false;
@@ -177,7 +181,7 @@ class WordPress_Stats {
 	public function get_current_mysql_usage() {
 		$response = wp_remote_get( $this->api_url . 'mysql/1.0/' );
 
-		if( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != 200 ) {
 			$this->report_error( $response );
 
 			return false;
