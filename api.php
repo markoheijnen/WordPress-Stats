@@ -148,6 +148,10 @@ class WordPress_Stats_Api {
 
 		$releases = array(
 			'4.0' => array(
+				'4.0.1' => array(
+					'title' => 'WordPress 4.0.1',
+					'link'  => 'https://wordpress.org/news/2014/11/wordpress-4-0-1/'
+				),
 				'4.0' => array(
 					'title' => 'WordPress 4.0 “Benny”',
 					'link'  => 'https://wordpress.org/news/2014/09/benny/'
