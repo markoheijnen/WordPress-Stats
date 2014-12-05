@@ -17,7 +17,9 @@ class WordPress_Stats_Api {
 		global $wpdb;
 
 		if ( false === ( $data = get_transient( 'wordpress_downloads_day' ) ) ) {
-			$query = "SELECT MAX(count) as count, Date(date_gmt) as date, date_format(date_gmt,'%m/%d/%Y') as date_display FROM " . self::db_table() . " WHERE type='downloads' AND version = '" . self::wp_version() . "' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt) ORDER BY date_gmt";
+			$table = self::db_table();
+			$version = self::wp_version();
+			$query = "SELECT MAX(count) as count, Date(date_gmt) as date, date_format(date_gmt,'%m/%d/%Y') as date_display FROM {$table} WHERE type='downloads' AND version = '{$version}' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt) ORDER BY date_gmt";
 			$data = $wpdb->get_results( $query );
 
 			$data = array_filter( $data, array( __CLASS__, 'make_value_number' ) );
@@ -32,7 +34,9 @@ class WordPress_Stats_Api {
 		global $wpdb;
 
 		if ( false === ( $count = get_transient( 'wordpress_downloads2' ) ) ) {
-			$query = "SELECT count FROM " . self::db_table() . " WHERE type='downloads' AND version = '" . self::wp_version() . "' ORDER BY date_gmt DESC LIMIT 1";
+			$table = self::db_table();
+			$version = self::wp_version();
+			$query = "SELECT count FROM {$table} WHERE type='downloads' AND version = '{$version}' ORDER BY date_gmt DESC LIMIT 1";
 			$count = $wpdb->get_row( $query );
 			$count = number_format( $count->count );
 
@@ -46,7 +50,9 @@ class WordPress_Stats_Api {
 		global $wpdb, $wp_locale;
 
 		if ( false === ( $count = get_transient( 'downloads_last7days' ) ) ) {
-			$query = "SELECT ( MAX(count) - MIN(count) ) as downloads, WEEKDAY( date_gmt ) as weekday FROM " . self::db_table() . " WHERE type='downloads' AND version = '" . self::wp_version() . "' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt) ORDER BY date_gmt DESC LIMIT 7";
+			$table = self::db_table();
+			$version = self::wp_version();
+			$query = "SELECT ( MAX(count) - MIN(count) ) as downloads, WEEKDAY( date_gmt ) as weekday FROM {$table} WHERE type='downloads' AND version = '{$version}' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt) ORDER BY date_gmt DESC LIMIT 7";
 			$data = $wpdb->get_results( $query );
 
 			$count = array();
@@ -100,7 +106,9 @@ class WordPress_Stats_Api {
 		}
 
 		if ( false === ( $data = get_transient( 'wordpress_counts_' . $type ) ) ) {
-			$query = "SELECT ( MAX(count) - MIN(count) ) as downloads, WEEKDAY( date_gmt ) as weekday, HOUR( date_gmt ) as hour FROM " . self::db_table() . " WHERE type='downloads' AND version = '" . self::wp_version() . "' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt), HOUR(date_gmt)";
+			$table = self::db_table();
+			$version = self::wp_version();
+			$query = "SELECT ( MAX(count) - MIN(count) ) as downloads, WEEKDAY( date_gmt ) as weekday, HOUR( date_gmt ) as hour FROM {$table} WHERE type='downloads' AND version = '{$version}' GROUP BY YEAR(date_gmt), MONTH(date_gmt), DATE(date_gmt), HOUR(date_gmt)";
 			$rows  = $wpdb->get_results( $query );
 
 			$days = array( 0, 0, 0, 0, 0, 0, 0 );
@@ -253,7 +261,8 @@ class WordPress_Stats_Api {
 		if ( false === ( $data = get_transient( 'wordpress_versions' ) ) ) {
 			global $wpdb;
 
-			$query = "SELECT s1.count as value, s1.version as label FROM " . self::db_table() . " as s1 LEFT JOIN " . self::db_table() . " s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='wordpress' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
+			$table = self::db_table();
+			$query = "SELECT s1.count as value, s1.version as label FROM {$table} as s1 LEFT JOIN {$table} s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='wordpress' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
 			$data = $wpdb->get_results( $query );
 
 			$data = array_values( array_filter( $data, array( __CLASS__, 'make_value_number' ) ) );
@@ -268,7 +277,8 @@ class WordPress_Stats_Api {
 		if ( false === ( $data = get_transient( 'php_versions' ) ) ) {
 			global $wpdb;
 
-			$query = "SELECT s1.count as value, s1.version as label FROM " . self::db_table() . " as s1 LEFT JOIN " . self::db_table() . " s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='php' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
+			$table = self::db_table();
+			$query = "SELECT s1.count as value, s1.version as label FROM {$table} as s1 LEFT JOIN {$table} s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='php' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
 			$data = $wpdb->get_results( $query );
 
 			$data = array_values( array_filter( $data, array( __CLASS__, 'make_value_number' ) ) );
@@ -283,7 +293,8 @@ class WordPress_Stats_Api {
 		if ( false === ( $data = get_transient( 'mysql_versions' ) ) ) {
 			global $wpdb;
 
-			$query = "SELECT s1.count as value, s1.version as label FROM " . self::db_table() . " as s1 LEFT JOIN " . self::db_table() . " s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='mysql' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
+			$table = self::db_table();
+			$query = "SELECT s1.count as value, s1.version as label FROM {$table} as s1 LEFT JOIN {$table} s2 ON (s1.type = s2.type AND s1.date_gmt < s2.date_gmt) WHERE s1.type='mysql' AND s2.type IS NULL AND s1.date_gmt > DATE_SUB(CURDATE(), INTERVAL 25 HOUR)";
 			$data = $wpdb->get_results( $query );
 
 			$data = array_values( array_filter( $data, array( __CLASS__, 'make_value_number' ) ) );
@@ -295,66 +306,78 @@ class WordPress_Stats_Api {
 	}
 
 
+	/**
+	 * @return array
+	 */
 	public static function wordpress_version_by_day() {
 		global $wpdb;
 
-		//$query = "SELECT version, GROUP_CONCAT(count) as mycount FROM wpc_wordpress_stats WHERE type='php' GROUP BY version";
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM wpc_wordpress_stats WHERE type='wordpress' AND version NOT IN ('2.7', '2.8', '2.9') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		//$query = "SELECT version, GROUP_CONCAT(count) as mycount FROM ".self::db_table()." WHERE type='php' GROUP BY version";
+		$table = self::db_table();
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
+		FROM {$table}
+		WHERE TYPE='wordpress' AND VERSION NOT IN ('2.7', '2.8', '2.9')
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function php_version_by_day() {
 		global $wpdb;
 
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM wpc_wordpress_stats WHERE type='php' AND version NOT IN ('4.3', '4.4', '5.0', '5.6', '5.7') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		$table = self::db_table();
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
+		FROM {$table}
+		WHERE type='php' AND version NOT IN ('4.3', '4.4', '5.0', '5.6', '5.7')
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function mysql_version_by_day() {
 		global $wpdb;
 
-		$query = "SELECT date_format(date_gmt,'%Y-%m-%d') as date, GROUP_CONCAT(count) as counts, GROUP_CONCAT(version) as versions FROM wpc_wordpress_stats WHERE type='mysql' AND version NOT IN ('3.23', '4.0', '4.1', '5.', '5.13', '5.2', '5.3', '5.4', '5.7') GROUP BY date_gmt";
-		$data = $wpdb->get_results( $query );
+		$table = self::db_table();
+		$query = "SELECT DATE_FORMAT(date_gmt,'%X W%V') AS date, version, AVG(count) AS count
+		FROM {$table}
+		WHERE type='mysql' AND version NOT IN ('3.23', '4.0', '4.1', '5.', '5.13', '5.2', '5.3', '5.4', '5.7')
+		GROUP BY DATE_FORMAT(date_gmt,'%X W%V'), version";
 
-		foreach ( $data as $key => $row ) {
-			$counts   = explode(',', $row->counts );
-			$versions = explode(',', $row->versions );
+		$results = $wpdb->get_results( $query );
+		$data    = array();
 
-			foreach ( $versions as $key2 => $version ) {
-				$data[ $key ]->$version = (float) $counts[ $key2 ];
-			}
-
-			unset( $data[ $key ]->counts );
-			unset( $data[ $key ]->versions );
+		foreach ( $results as $item ) {
+			$data[ $item->date ]['date']           = $item->date;
+			$data[ $item->date ][ $item->version ] = round( $item->count, 2 );
 		}
+
+		$data = array_values( $data );
 
 		return $data;
 	}

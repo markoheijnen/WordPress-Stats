@@ -67,6 +67,12 @@ class Rockstar_Graph_Morris extends Rockstar_Graph_Abstract {
 		else
 			$html .= ",labels: ['Value']";
 
+		$html .= ',pointSize:0';
+
+		if ( isset( $args['ymax'] ) ) {
+			$html .= ',ymax:' . esc_js( $args['ymax'] );
+		}
+
 
 		$html .= '}));';
 		$html .= '});';
