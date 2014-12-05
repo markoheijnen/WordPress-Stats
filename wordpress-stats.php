@@ -198,7 +198,11 @@ class WordPress_Stats {
 	public function add_stat( $type, $version, $count ) {
 		global $wpdb;
 
-		if( ! $this->request_time ) {
+		if ( false === $count ) {
+			$this->report_error( 'The value of count was false:' . $type . ' - ' . $version );
+		}
+
+		if ( ! $this->request_time ) {
 			$this->request_time = get_gmt_from_date( current_time( 'mysql' ) );
 		}
 
