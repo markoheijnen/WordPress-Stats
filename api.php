@@ -137,7 +137,9 @@ class WordPress_Stats_Api {
 			'3.6',
 			'3.7',
 			'3.8',
-			'3.9'
+			'3.9',
+			'4.0',
+			'4.1',
 		);
 	}
 
@@ -147,6 +149,12 @@ class WordPress_Stats_Api {
 		}
 
 		$releases = array(
+			'4.1' => array(
+				'4.1' => array(
+					'title' => 'WordPress 4.1 “Dinah”',
+					'link'  => 'https://wordpress.org/news/2014/12/dinah/'
+				)
+			),
 			'4.0' => array(
 				'4.0.1' => array(
 					'title' => 'WordPress 4.0.1',
